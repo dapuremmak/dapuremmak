@@ -279,7 +279,77 @@
       showLogo("logoImgHeader", "logoSvgHeader");
       showLogo("logoImgAbout", "logoSvgAbout");
     }
+
+    const reservationSection = document.getElementById("reservasi");
+    const navReservasi = document.getElementById("navReservasi");
+    if (c.reservationEnabled) {
+      if (reservationSection) reservationSection.style.display = "";
+      if (navReservasi) navReservasi.style.display = "";
+      set("reservationTitle", c.reservationTitle);
+      const descEl = document.getElementById("reservationDesc");
+      if (descEl && c.reservationDesc) descEl.textContent = c.reservationDesc;
+      const noteEl = document.getElementById("reservationNote");
+      if (noteEl) noteEl.textContent = c.reservationNote || "";
+    }
   }
+
+  function renderReservationProducts(){
+    const container = document.getElementById("reservationProducts");
+    if (!container) return;
+    container.innerHTML = PRODUCTS.map(p => `
+      <label class="reservation-item">
+        <input type="checkbox" data-res-id="${p.id}">
+        <span>${p.name}${p.isPreOrder ? " (Pre-Order)" : ""}</span>
+        <span class="res-price">${rupiah(p.price)}</span>
+      </label>
+    `).join("");
+    container.querySelectorAll("input[type=checkbox]").forEach(cb => {
+      cb.addEventListener("change", updateReservationLink);
+    });
+  }
+
+  function buildReservationMessage(){
+    const name = document.getElementById("resName").value.trim();
+    const phone = document.getElementById("resPhone").value.trim();
+    const date = document.getElementById("resDate").value;
+    const note = document.getElementById("resNote").value.trim();
+
+    const chosenIds = Array.from(document.querySelectorAll("#reservationProducts input:checked")).map(cb => cb.dataset.resId);
+    const chosenProducts = PRODUCTS.filter(p => chosenIds.includes(p.id));
+
+    let msg = "Halo Dapur Emmak, saya mau reservasi kue (belum bayar, ini baru catatan minat):\n\n";
+    if (chosenProducts.length){
+      chosenProducts.forEach(p => { msg += `- ${p.name}\n`; });
+    } else {
+      msg += "- (belum pilih kue tertentu)\n";
+    }
+    msg += `\nPerkiraan tanggal ambil: ${date ? formatIDDate(date) : "-"}\n`;
+    msg += `Nama: ${name || "-"}\n`;
+    msg += `No. HP: ${phone || "-"}\n`;
+    if (note) msg += `Catatan: ${note}\n`;
+    msg += "\nMohon info kalau kuenya tersedia untuk tanggal itu ya, terima kasih!";
+    return msg;
+  }
+
+  function updateReservationLink(){
+    const link = document.getElementById("waReservationLink");
+    if (!link) return;
+    link.href = `https://wa.me/${STORE_WHATSAPP}?text=${encodeURIComponent(buildReservationMessage())}`;
+  }
+
+  ["resName","resPhone","resDate","resNote"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("input", updateReservationLink);
+  });
+
+  document.getElementById("waReservationLink").addEventListener("click", (e) => {
+    const chosen = document.querySelectorAll("#reservationProducts input:checked").length;
+    const date = document.getElementById("resDate").value;
+    if (chosen === 0 || !date){
+      e.preventDefault();
+      alert("Mohon pilih minimal satu kue dan isi perkiraan tanggal pengambilan dulu ya.");
+    }
+  });
 
   // ---------- Init ----------
   document.getElementById("year").textContent = new Date().getFullYear();
@@ -306,8 +376,10 @@
       preOrderLeadDays = 2;
     }
     renderProducts();
+    renderReservationProducts();
     renderCart();
     updateWaLinks();
+    updateReservationLink();
   });
 
 })();
