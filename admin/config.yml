@@ -51,6 +51,16 @@ collections:
           - label: "Pesan otomatis tombol Chat WhatsApp (di bagian Kontak)"
             name: "waContactMessage"
             widget: "text"
+          - label: "Minimal hari pre-order (H- berapa hari sebelum diambil)"
+            name: "preOrderLeadDays"
+            widget: "number"
+            value_type: "int"
+            default: 2
+            hint: "Berlaku untuk produk yang ditandai Pre-Order di daftar produk"
+          - label: "Catatan pre-order untuk pembeli"
+            name: "preOrderNote"
+            widget: "text"
+            default: "Produk bertanda Pre-Order dibuat fresh setelah pesanan masuk, jadi butuh waktu produksi. Pesan lebih awal ya supaya bisa diambil tepat waktu."
 
   - name: "products"
     label: "Produk & Kontak"
@@ -89,3 +99,8 @@ collections:
                 name: "image"
                 widget: "image"
                 required: false
+              - label: "Produk Pre-Order?"
+                name: "isPreOrder"
+                widget: "boolean"
+                default: false
+                hint: "Aktifkan kalau produk ini baru dibuat setelah ada pesanan (butuh waktu produksi)"
