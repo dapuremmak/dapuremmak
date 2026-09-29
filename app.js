@@ -3,9 +3,49 @@
 
   let PRODUCTS = [];
   let STORE_WHATSAPP = "";
+  let preOrderLeadDays = 0;
+  let preOrderNote = "";
   const cart = {}; // { productId: qty }
 
   const rupiah = (n) => "Rp" + n.toLocaleString("id-ID");
+  const toISODate = (d) => d.toISOString().slice(0, 10);
+  const formatIDDate = (isoStr) => {
+    if (!isoStr) return "-";
+    const d = new Date(isoStr + "T00:00:00");
+    return d.toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  };
+
+  function updateOrderDateConstraints(){
+    const entries = cartEntries();
+    const hasPreOrder = entries.some(e => e.product.isPreOrder);
+    const leadDays = hasPreOrder ? preOrderLeadDays : 0;
+
+    const min = new Date();
+    min.setDate(min.getDate() + leadDays);
+    const minStr = toISODate(min);
+
+    const dateInput = document.getElementById("orderDate");
+    const hintEl = document.getElementById("orderDateHint");
+    const bannerEl = document.getElementById("preorderBanner");
+    if (!dateInput) return;
+
+    dateInput.min = minStr;
+    if (dateInput.value && dateInput.value < minStr) dateInput.value = minStr;
+
+    if (hintEl){
+      hintEl.textContent = hasPreOrder
+        ? `Ada produk pre-order di keranjang, tanggal paling cepat: ${formatIDDate(minStr)}.`
+        : "Pilih tanggal pengambilan/pengiriman yang kamu inginkan.";
+    }
+    if (bannerEl){
+      if (hasPreOrder && preOrderNote){
+        bannerEl.textContent = preOrderNote;
+        bannerEl.style.display = "block";
+      } else {
+        bannerEl.style.display = "none";
+      }
+    }
+  }
 
   const productImage = (p) => {
     if (p.image) return `<img src="${p.image}" alt="${p.name}">`;
@@ -17,11 +57,15 @@
     const grid = document.getElementById("productGrid");
     grid.innerHTML = PRODUCTS.map(p => `
       <div class="product-card">
-        <div class="product-image">${productImage(p)}</div>
+        <div class="product-image">
+          ${p.isPreOrder ? '<span class="pre-badge">Pre-Order</span>' : ''}
+          ${productImage(p)}
+        </div>
         <div class="product-body">
           <p class="product-name">${p.name}</p>
           <p class="product-unit">${p.unit}</p>
           <p class="product-desc">${p.desc}</p>
+          ${p.isPreOrder ? `<p class="preorder-hint">Butuh waktu produksi, min. ${preOrderLeadDays} hari sebelum diambil.</p>` : ''}
           <div class="product-foot">
             <span class="product-price">${rupiah(p.price)}</span>
             <button class="add-btn" data-id="${p.id}" aria-label="Tambah ${p.name} ke keranjang">+</button>
@@ -105,6 +149,7 @@
 
     totalEl.textContent = rupiah(cartTotal());
     renderCheckoutSummary();
+    updateOrderDateConstraints();
   }
 
   function renderCheckoutSummary(){
@@ -125,15 +170,17 @@
     const name = document.getElementById("custName").value.trim();
     const phone = document.getElementById("custPhone").value.trim();
     const address = document.getElementById("custAddress").value.trim();
+    const dateVal = document.getElementById("orderDate") ? document.getElementById("orderDate").value : "";
 
     let msg = "Halo Dapur Emmak, saya mau pesan:\n\n";
     entries.forEach(e => {
-      msg += `- ${e.product.name} x${e.qty} (${rupiah(e.product.price * e.qty)})\n`;
+      msg += `- ${e.product.name} x${e.qty} (${rupiah(e.product.price * e.qty)})${e.product.isPreOrder ? " [Pre-Order]" : ""}\n`;
     });
     msg += `\nTotal: ${rupiah(cartTotal())}\n\n`;
     msg += `Nama: ${name || "-"}\n`;
     msg += `No. HP: ${phone || "-"}\n`;
-    msg += `Alamat/catatan: ${address || "-"}\n\n`;
+    msg += `Alamat/catatan: ${address || "-"}\n`;
+    msg += `Tanggal pengambilan/pengiriman: ${dateVal ? formatIDDate(dateVal) : "-"}\n\n`;
     msg += "Bukti pembayaran QRIS akan saya kirim menyusul. Terima kasih!";
     return msg;
   }
@@ -173,8 +220,18 @@
   document.getElementById("checkoutClose").addEventListener("click", closeCheckout);
   checkoutOverlay.addEventListener("click", closeCheckout);
 
-  ["custName","custPhone","custAddress"].forEach(id => {
+  ["custName","custPhone","custAddress","orderDate"].forEach(id => {
     document.getElementById(id).addEventListener("input", updateWaLinks);
+  });
+
+  document.getElementById("waCheckoutLink").addEventListener("click", (e) => {
+    const dateInput = document.getElementById("orderDate");
+    if (!dateInput.value){
+      e.preventDefault();
+      dateInput.focus();
+      dateInput.style.borderColor = "var(--coral-600)";
+      alert("Mohon isi tanggal pengambilan/pengiriman dulu ya.");
+    }
   });
 
   function renderContent(c){
@@ -236,6 +293,10 @@
     if (contentData) {
       renderContent(contentData);
       if (contentData.waContactMessage) waContactMessage = contentData.waContactMessage;
+      preOrderLeadDays = Number(contentData.preOrderLeadDays) || 2;
+      preOrderNote = contentData.preOrderNote || "";
+    } else {
+      preOrderLeadDays = 2;
     }
     renderProducts();
     renderCart();
