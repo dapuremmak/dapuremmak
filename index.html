@@ -150,10 +150,16 @@
 
     <div class="checkout-step">
       <p class="checkout-step-label">1. Isi data pengiriman</p>
+      <div id="preorderBanner" class="preorder-banner" style="display:none;"></div>
       <div class="form-grid">
         <input type="text" id="custName" placeholder="Nama penerima">
         <input type="tel" id="custPhone" placeholder="No. HP aktif">
         <textarea id="custAddress" placeholder="Alamat pengiriman / catatan pengambilan" rows="2"></textarea>
+        <div>
+          <label for="orderDate" style="font-size:13px;font-weight:600;color:var(--brown-800);display:block;margin-bottom:6px;">Tanggal pengambilan / pengiriman</label>
+          <input type="date" id="orderDate">
+          <p id="orderDateHint" class="date-hint"></p>
+        </div>
       </div>
     </div>
 
