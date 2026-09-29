@@ -61,6 +61,27 @@ collections:
             name: "preOrderNote"
             widget: "text"
             default: "Produk bertanda Pre-Order dibuat fresh setelah pesanan masuk, jadi butuh waktu produksi. Pesan lebih awal ya supaya bisa diambil tepat waktu."
+          - label: "Aktifkan bagian Reservasi/Pre-Booking?"
+            name: "reservationEnabled"
+            widget: "boolean"
+            default: false
+            required: false
+            hint: "Nyalakan menjelang musim ramai seperti Ramadan/Lebaran, matikan lagi kalau sudah tidak perlu"
+          - label: "Judul bagian Reservasi"
+            name: "reservationTitle"
+            widget: "string"
+            required: false
+            default: "Reservasi Kue Lebaran"
+          - label: "Deskripsi bagian Reservasi"
+            name: "reservationDesc"
+            widget: "text"
+            required: false
+            default: "Isi form ini untuk menandai kue yang kamu minati beserta tanggal pengambilannya. Ini baru catatan minat, belum termasuk pembayaran — nanti kami hubungi balik untuk konfirmasi."
+          - label: "Catatan kecil di bawah tombol kirim"
+            name: "reservationNote"
+            widget: "string"
+            required: false
+            default: "Reservasi ini belum termasuk pembayaran."
 
   - name: "products"
     label: "Produk & Kontak"
