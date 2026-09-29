@@ -103,4 +103,5 @@ collections:
                 name: "isPreOrder"
                 widget: "boolean"
                 default: false
+                required: false
                 hint: "Aktifkan kalau produk ini baru dibuat setelah ada pesanan (butuh waktu produksi)"
