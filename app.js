@@ -17,8 +17,15 @@
 
   function updateOrderDateConstraints(){
     const entries = cartEntries();
-    const hasPreOrder = entries.some(e => e.product.isPreOrder);
-    const leadDays = hasPreOrder ? preOrderLeadDays : 0;
+    const preOrderEntries = entries.filter(e => e.product.isPreOrder);
+    const hasPreOrder = preOrderEntries.length > 0;
+
+    let leadDays = 0;
+    if (hasPreOrder) {
+      leadDays = Math.max(...preOrderEntries.map(e =>
+        Number(e.product.leadTimeDays) > 0 ? Number(e.product.leadTimeDays) : preOrderLeadDays
+      ));
+    }
 
     const min = new Date();
     min.setDate(min.getDate() + leadDays);
@@ -65,7 +72,7 @@
           <p class="product-name">${p.name}</p>
           <p class="product-unit">${p.unit}</p>
           <p class="product-desc">${p.desc}</p>
-          ${p.isPreOrder ? `<p class="preorder-hint">Butuh waktu produksi, min. ${preOrderLeadDays} hari sebelum diambil.</p>` : ''}
+          ${p.isPreOrder ? `<p class="preorder-hint">Butuh waktu produksi, min. ${Number(p.leadTimeDays) > 0 ? p.leadTimeDays : preOrderLeadDays} hari sebelum diambil.</p>` : ''}
           <div class="product-foot">
             <span class="product-price">${rupiah(p.price)}</span>
             <button class="add-btn" data-id="${p.id}" aria-label="Tambah ${p.name} ke keranjang">+</button>
