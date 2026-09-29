@@ -27,40 +27,51 @@ collections:
           - label: "Kalimat kecil di atas judul (hero)"
             name: "heroEyebrow"
             widget: "string"
+            required: false
           - label: "Judul besar (hero)"
             name: "heroTitle"
             widget: "text"
+            required: false
           - label: "Sub-judul (hero)"
             name: "heroSub"
             widget: "text"
+            required: false
           - label: "Judul bagian Tentang Kami"
             name: "aboutTitle"
             widget: "string"
+            required: false
           - label: "Isi teks Tentang Kami"
             name: "aboutText"
             widget: "text"
+            required: false
           - label: "Alamat / area pengambilan"
             name: "address"
             widget: "string"
+            required: false
           - label: "Jam layanan"
             name: "hours"
             widget: "string"
+            required: false
           - label: "Username Instagram"
             name: "instagram"
             widget: "string"
+            required: false
           - label: "Pesan otomatis tombol Chat WhatsApp (di bagian Kontak)"
             name: "waContactMessage"
             widget: "text"
+            required: false
           - label: "Minimal hari pre-order (H- berapa hari sebelum diambil)"
             name: "preOrderLeadDays"
             widget: "number"
             value_type: "int"
             default: 2
+            required: false
             hint: "Berlaku untuk produk yang ditandai Pre-Order di daftar produk"
           - label: "Catatan pre-order untuk pembeli"
             name: "preOrderNote"
             widget: "text"
             default: "Produk bertanda Pre-Order dibuat fresh setelah pesanan masuk, jadi butuh waktu produksi. Pesan lebih awal ya supaya bisa diambil tepat waktu."
+            required: false
           - label: "Aktifkan bagian Reservasi/Pre-Booking?"
             name: "reservationEnabled"
             widget: "boolean"
