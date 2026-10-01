@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reservasi — Dapur Emmak</title>
+<meta name="description" content="Reservasi kue kering Dapur Emmak, catat minat dan tanggal pengambilan sebelum musim ramai.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,500;1,9..144,600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a href="index.html" class="brand">
+      <img id="logoImgHeader" class="brand-mark" alt="Logo Dapur Emmak" style="display:none;object-fit:contain;">
+      <svg id="logoSvgHeader" class="brand-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2"/>
+        <circle cx="50" cy="50" r="39" fill="none" stroke="currentColor" stroke-width="0.75" stroke-dasharray="1 4"/>
+        <g transform="translate(50,42)">
+          <line x1="-12" y1="0" x2="12" y2="0" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+          <circle cx="-12" cy="0" r="3" fill="currentColor"/>
+          <circle cx="12" cy="0" r="3" fill="currentColor"/>
+        </g>
+        <g transform="translate(50,60)" fill="currentColor">
+          <path d="M0,-6 C2.5,-3.5 2.5,2 0,6 C-2.5,2 -2.5,-3.5 0,-6 Z"/>
+          <path d="M-9,-3.5 C-6.5,-1.5 -6.5,4 -9,8 C-11.5,4 -11.5,-1.5 -9,-3.5 Z" opacity="0.85"/>
+          <path d="M9,-3.5 C11.5,-1.5 11.5,4 9,8 C6.5,4 6.5,-1.5 9,-3.5 Z" opacity="0.85"/>
+        </g>
+      </svg>
+      <span class="brand-name">Dapur Emmak</span>
+    </a>
+    <nav class="header-nav">
+      <a href="index.html#produk">Produk</a>
+      <a href="index.html#tentang">Tentang</a>
+      <a href="index.html#kontak">Kontak</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="section">
+    <div class="wrap">
+      <p class="section-eyebrow">Pre-Booking</p>
+      <h2 class="section-title" id="reservationTitle">Reservasi Kue Lebaran</h2>
+      <p class="hero-sub" id="reservationDesc" style="margin:-20px 0 32px;max-width:640px;">Isi form ini untuk menandai kue yang kamu minati beserta tanggal pengambilannya. Ini baru catatan minat, belum termasuk pembayaran — nanti kami hubungi balik untuk konfirmasi.</p>
+
+      <div id="reservationClosed" style="display:none;max-width:640px;">
+        <div class="reservation-box">
+          <p style="margin:0;color:var(--ink-soft);">Reservasi belum dibuka saat ini. Silakan cek kembali nanti, atau langsung lihat katalog produk kami.</p>
+          <a href="index.html#produk" class="btn btn-primary" style="margin-top:16px;">Lihat produk</a>
+        </div>
+      </div>
+
+      <div id="reservationOpen" class="reservation-box" style="display:none;max-width:640px;">
+        <p class="checkout-step-label">Pilih kue yang diminati</p>
+        <div id="reservationProducts" class="reservation-products"></div>
+
+        <div class="form-grid" style="margin-top:18px;">
+          <input type="text" id="resName" placeholder="Nama">
+          <input type="tel" id="resPhone" placeholder="No. HP aktif">
+          <div>
+            <label for="resDate" style="font-size:13px;font-weight:600;color:var(--brown-800);display:block;margin-bottom:6px;">Perkiraan tanggal pengambilan</label>
+            <input type="date" id="resDate">
+          </div>
+          <textarea id="resNote" placeholder="Catatan tambahan (opsional): jumlah toples, request khusus, dll." rows="2"></textarea>
+        </div>
+
+        <a id="waReservationLink" href="#" target="_blank" rel="noopener" class="btn btn-primary btn-block" style="margin-top:16px;">Kirim reservasi via WhatsApp</a>
+        <p id="reservationNote" class="date-hint" style="text-align:center;margin-top:10px;"></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <span>&copy; <span id="year"></span> Dapur Emmak</span>
+    <span>Kue kering rumahan, dibuat dengan hati.</span>
+  </div>
+</footer>
+
+<script src="reservation.js"></script>
+</body>
+</html>
